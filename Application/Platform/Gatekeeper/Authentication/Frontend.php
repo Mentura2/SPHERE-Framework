@@ -4,6 +4,7 @@ namespace SPHERE\Application\Platform\Gatekeeper\Authentication;
 
 use DateTime;
 use Exception;
+use SPHERE\Application\Education\ClassRegister\Absence\Absence;
 use SPHERE\Application\Education\ClassRegister\Digital\Digital;
 use SPHERE\Application\Education\ClassRegister\Timetable\Timetable;
 use SPHERE\Application\Education\Graduation\Evaluation\Evaluation;
@@ -216,6 +217,7 @@ class Frontend extends Extension implements IFrontendInterface
             . ($contentHeadmasterWelcome ?: '')
             . ($contentTeacherWelcome ?: '')
             . ($contentSecretariatWelcome ?: '')
+            . (Absence::useService()->getAbsenceMissingExcusePanel(3) ?: '')
             . $this->getCleanLocalStorage()
         );
 

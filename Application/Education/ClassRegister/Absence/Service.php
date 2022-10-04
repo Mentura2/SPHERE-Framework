@@ -8,6 +8,7 @@
 
 namespace SPHERE\Application\Education\ClassRegister\Absence;
 
+use DateInterval;
 use DateTime;
 use SPHERE\Application\Education\ClassRegister\Absence\Service\Data;
 use SPHERE\Application\Education\ClassRegister\Absence\Service\Entity\TblAbsence;
@@ -27,8 +28,10 @@ use SPHERE\Application\Platform\Gatekeeper\Authorization\Account\Account;
 use SPHERE\Application\Setting\Consumer\Consumer;
 use SPHERE\Common\Frontend\Form\Structure\Form;
 use SPHERE\Common\Frontend\Icon\Repository\Exclamation;
+use SPHERE\Common\Frontend\Layout\Repository\Panel;
 use SPHERE\Common\Frontend\Message\Repository\Danger;
 use SPHERE\System\Database\Binding\AbstractService;
+use SPHERE\System\Extension\Repository\Debugger;
 
 /**
  * Class Service
@@ -839,5 +842,37 @@ class Service extends AbstractService
     public function hasPersonAbsenceLessons(TblPerson $tblPerson, TblDivision $tblDivision, $Status)
     {
         return (new Data($this->getBinding()))->hasPersonAbsenceLessons($tblPerson, $tblDivision, $Status);
+    }
+
+    /**
+     * @param int $days
+     * @return Panel
+     */
+    public function getAbsenceMissingExcusePanel(int $days)
+    {
+        $dataList = array();
+        $dateTime = new DateTime('today');
+        $dateTime->sub(new DateInterval('P' . $days .'D'));
+
+        if (($tblYearList = Term::useService()->getYearByNow())) {
+            foreach ($tblYearList as $tblYear) {
+                if (($tblDivisionList = Division::useService()->getDivisionAllByYear($tblYear))) {
+                    foreach ($tblDivisionList as $tblDivision) {
+
+                        // todo aus performance gründen auf Querybuilder umstellen
+                        $tblAbsenceInDivision = $this->getAbsenceAllByDivision($tblDivision);
+                        foreach ($tblAbsenceInDivision as $testing){
+
+                        }
+
+                        // $dataList[] = inhalt
+                    }
+                }
+            }
+        }
+
+
+
+        return new Panel('Fehlzeiten mit fehlenden Entschuldingungen', $dataList, Panel::PANEL_TYPE_INFO);
     }
 }
