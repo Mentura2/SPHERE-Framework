@@ -18,16 +18,21 @@ use SPHERE\Common\Frontend\Form\Repository\Field\CheckBox;
 use SPHERE\Common\Frontend\Form\Structure\FormColumn;
 use SPHERE\Common\Frontend\Form\Structure\FormGroup;
 use SPHERE\Common\Frontend\Form\Structure\FormRow;
+use SPHERE\Common\Frontend\Icon\Repository\Info;
+use SPHERE\Common\Frontend\Layout\Repository\PullClear;
+use SPHERE\Common\Frontend\Layout\Repository\PullRight;
 use SPHERE\Common\Frontend\Icon\Repository\Nameplate;
 use SPHERE\Common\Frontend\Icon\Repository\Publicly;
 use SPHERE\Common\Frontend\Icon\Repository\YubiKey;
 use SPHERE\Common\Frontend\Layout\Repository\Title;
+use SPHERE\Common\Frontend\Layout\Structure\Layout;
 use SPHERE\Common\Frontend\Layout\Structure\LayoutColumn;
 use SPHERE\Common\Frontend\Layout\Structure\LayoutGroup;
 use SPHERE\Common\Frontend\Layout\Structure\LayoutRow;
 use SPHERE\Common\Frontend\Link\Repository\ToggleSelective;
 use SPHERE\Common\Frontend\Message\Repository\Danger;
 use SPHERE\Common\Frontend\Message\Repository\Success;
+use SPHERE\Common\Frontend\Text\Repository\ToolTip;
 use SPHERE\Common\Window\Redirect;
 use SPHERE\Common\Window\Stage;
 use SPHERE\System\Extension\Repository\Sorter\StringGermanOrderSorter;
@@ -396,10 +401,18 @@ class Service extends \SPHERE\Application\Platform\Gatekeeper\Authorization\Acco
         $tblRoleAll = $this->getSorter($tblRoleAll)->sortObjectBy(TblRole::ATTR_NAME, new StringGermanOrderSorter());
         if ($tblRoleAll){
             array_walk($tblRoleAll, function(TblRole &$tblRole) use(&$TeacherRole, $dataName){
-                $tblRole = new CheckBox($dataName . '['.$tblRole->getId().']',
-                    ($tblRole->isSecure() ? new YubiKey() : new Publicly()).' '.$tblRole->getName(),
-                    $tblRole->getId()
-                );
+
+                $tblRole = new Layout(new LayoutGroup(new LayoutRow(array(
+                    new LayoutColumn(
+                        new CheckBox($dataName . '['.$tblRole->getId().']', ($tblRole->isSecure() ? new YubiKey() : new Publicly()).' '.$tblRole->getName(), $tblRole->getId())
+                        , 8),
+
+                    new LayoutColumn(
+                        new PullRight((Account::useService()->getRoleDescriptionToolTipByRole($tblRole)))
+                        , 4)
+                ))));
+
+            //    $tblRole = new PullClear($checkBox.new PullRight(Account::useService()->getRoleDescriptionToolTipByRole($tblRole)));
             });
             $tblRoleAll = array_filter($tblRoleAll);
         } else {
@@ -476,5 +489,49 @@ class Service extends \SPHERE\Application\Platform\Gatekeeper\Authorization\Acco
         }
 
         return empty($tblAccountConsumerTokenList) ? false : $tblAccountConsumerTokenList;
+    }
+
+    public function getRoleDescriptionToolTipByRole(TblRole $tblRole) {
+
+        switch ($tblRole->getName()) {
+            case 'Auswertung: Allgemein': return new ToolTip(new Info(), 'Auswertungen (Standard, Individual), Check-Listen, Adresslisten für Serienbriefe');
+            case 'Auswertung: Flexible Auswertung': return new ToolTip(new Info(), 'Flexible Auswertung (Auswertungen selbst zusammenstellen)');
+            case 'Auswertung: Kamenz-Statistik': return new ToolTip(new Info(), 'Auswertungen für die Kamenz-Statistik (verfügbar für Schulträger, die die anteilige Kostenübernahme für diese Auswertung über die Schulstiftung explizit zugesagt haben)');
+            case 'Bildung: Fehlzeiten (Verwaltung)': return new ToolTip(new Info(), 'Fehlzeitenverwaltung Kalenderansicht mit direkter Suche über alle Schüler');
+            case 'Bildung: Klassenbuch (Lehrer mit Lehrauftrag)': return new ToolTip(new Info(), 'Digitales Klassenbuch für Lehrer mit Lehrauftrag und Klassenlehrer');
+            case 'Bildung: Klassenbuch (Alle Klassenbücher)': return new ToolTip(new Info(), 'Digitales Klassenbuch aller Klassen');
+            case 'Bildung: Klassenbuch (Integrationsbeauftragte)': return new ToolTip(new Info(), 'Digitales Klassenbuch und Integration aller Klassen');
+            case 'Bildung: Klassenbuch (Schulleitung)': return new ToolTip(new Info(), 'Digitales Klassenbuch, Integration und inkl. Verwaltung und Auswertung von Belehrungen aller Klassen');
+            case 'Bildung: Notenbuch (Integrationsbeauftragte)': return new ToolTip(new Info(), 'Notenbuch aller Schüler');
+            case 'Bildung: pädagogisches Tagebuch (Klassenlehrer)': return new ToolTip(new Info(), 'pädagogisches Tagebuch (Klassenlehrer mit eigener Klasse)');
+            case 'Bildung: pädagogisches Tagebuch (Schulleitung)': return new ToolTip(new Info(), 'pädagogisches Tagebuch (alle Klassen)');
+            case 'Bildung: Unterrichtsverwaltung': return new ToolTip(new Info(), 'Fächer-, Schuljahr- und Klassenverwaltung, Sortierung aller Klassen');
+            case 'Schüler und Eltern Zugang': return new ToolTip(new Info(), 'Zensurenübersicht, Online Krankmeldung und Online Krankmeldung und Online Kontakten Änderungswünsche für Eltern/Schüler (wird bei Generierung der Schüler/Eltern - Zugänge automatisch gesetzt), auch notwendig für Mitarbeiter, welche gleichzeitig Eltern sind ');
+            case 'Bildung: Zensurenvergabe (Lehrer)': return new ToolTip(new Info(), 'Notenvergabe, Notenbuch für Lehrer mit Lehrauftrag, Notenbuch, Schülerübersicht, Einsicht Notenaufträge für Klassenlehrer (eigene Klasse)');
+            case 'Bildung: Zensurenvergabe (Schulleitung)': return new ToolTip(new Info(), 'Notenvergabe, Notenbuch in allen Klassen, Festlegung und Einsicht Notenaufträge (Stichtags- und Kopfnoten');
+            case 'Bildung: Zensurenverwaltung': return new ToolTip(new Info(), 'Festlegung von Zensuren-Typen, Berechnungsvorschriften, Bewertungssystemen, Mindestnotenanzahl');
+            case 'Bildung: Zeugnis (Drucken - Klassenlehrer)': return new ToolTip(new Info(), 'Drucken der Zeugnisse für Klassenlehrer (automatische Eingrenzung auf die jeweilige Klasse)');
+            case 'Bildung: Zeugnis (Drucken)': return new ToolTip(new Info(), 'Drucken der Zeugnisse');
+            case 'Bildung: Zeugnis (Einstellungen)': return new ToolTip(new Info(), 'Einstellungen Zeugnisvorlagen (Fächer und deren Reihenfolge auf den Zeugnis');
+            case 'Bildung: Zeugnis (Freigabe)': return new ToolTip(new Info(), 'Freitgabe der Zeugnisse für den Druck');
+            case 'Bildung: Zeugnis (Generierung)': return new ToolTip(new Info(), 'Generierung eines Zeugnisauftrages (Zeugnisdatum und -vorlage, Stichtags- und Kopfnotenauftrag, Name Schulleiter/in');
+            case 'Bildung: Zeugnis (Vorbereitung - Abgangszeugnisse)': return new ToolTip(new Info(), 'Zeugnisvorbereitung der Abgangszeugnisse für Oberschule und Gymnasium (SEKI)');
+            case 'Bildung: Zeugnis (Vorbereitung - Abschlusszeugnisse)': return new ToolTip(new Info(), 'Zeugnisvorbereitung der Abschlusszeugnisse (Prüfungsnoten, Vorjahresnoten, etc.)');
+            case 'Bildung: Zeugnis (Vorbereitung - Klassenlehrer)': return new ToolTip(new Info(), 'Zeugnisvorbereitung (Festlegung Kopfnoten, Hinterlegung sonstiger Informationen wie Bemerkung, Fehlzeiten etc.)');
+            case 'Datentransfer: Import und Export': return new ToolTip(new Info(), 'Import der Lehraufträge aus externer Stundenplansoftware');
+            case 'Dokumente': return new ToolTip(new Info(), 'Dokumentendruck Standard (Schulbescheinigung, Schülerkartei) und Individual');
+            case 'Einstellungen: Administrator': return new ToolTip(new Info(), 'Verwaltung von Benutzerkonten, Mandanteinstellungen, Eigenes Passwort ändern');
+            case 'Einstellungen: Benutzer': return new ToolTip(new Info(), 'Benutzereinestellungen (Aussehen der Programmoberfläche, Eigenes Passwort änden, Hilfe und Support)');
+            case 'Einstellungen: Benutzer (Schüler/Eltern) - nicht sichtbar': return new ToolTip(new Info(), 'Benutzereinestellungen (Aussehen der Programmoberfläche, Eigenes Passwort änden, wird bei Generierung der Schüler/Eltern - Zugänge automatisch gesetzt)');
+            case 'Einstellungen: Verwaltung Schüler und Eltern Zugang': return new ToolTip(new Info(), 'Erstellung der Benutzerkontos für Eltern / Schüler inkl. Passwortrücksetzung');
+            case 'Fakturierung': return new ToolTip(new Info(), 'Fakturierungsmodul (z.B. Verwaltung von Schulgeld');
+            case 'Feedback & Support': return new ToolTip(new Info(), 'Supportformular Ticketsystem');
+            case 'Stammdaten: Institutionenverwaltung (Lesen + Schreiben)': return new ToolTip(new Info(), 'Verwaltung von Institutionen (Schulen, Kitas, etc.)');
+            case 'Stammdaten: Institutionenverwaltung (Lesen)': return new ToolTip(new Info(), 'ReadOnly von Institutionen (Schulen, Kitas etc.)');
+            case 'Stammdaten: Personenverwaltung (Lesen + Schreiben)': return new ToolTip(new Info(), 'Verwaltung von Personen (Schüler, Sorgeberechtigte Interessenten, Lehrer, etc.');
+            case 'Stammdaten: Personenverwaltung (Lesen)': return new ToolTip(new Info(), 'ReadOnly von Personen (Schüler, Sorgeberechtigte, Interessenten, Lehrer, etc.');
+        }
+        return '';
+
     }
 }
