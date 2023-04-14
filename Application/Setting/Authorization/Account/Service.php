@@ -492,14 +492,6 @@ class Service extends \SPHERE\Application\Platform\Gatekeeper\Authorization\Acco
     }
 
     public function getRoleDescriptionToolTipByRole(TblRole $tblRole) {
-
-      (new ToolTip(
-            new \SPHERE\Common\Frontend\Text\Repository\Primary(new \SPHERE\Common\Frontend\Icon\Repository\Info())
-            , htmlspecialchars('<div style="width: 200px !important;">'
-                .'Wenn dieses Symbol <b>( ! )</b> angezeigt wird, ist zu der Person ist keine Mailadresse hinterlegt'
-                .'</div>')
-        ))->enableHtml();
-
         switch ($tblRole->getName()) {
             case 'Auswertung: Allgemein': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Auswertungen (Standard, Individual), Check-Listen, Adresslisten für Serienbriefe'.'</div>')))->enableHtml();
             case 'Auswertung: Flexible Auswertung': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Flexible Auswertung (Auswertungen selbst zusammenstellen)'.'</div>')))->enableHtml();
