@@ -493,43 +493,50 @@ class Service extends \SPHERE\Application\Platform\Gatekeeper\Authorization\Acco
 
     public function getRoleDescriptionToolTipByRole(TblRole $tblRole) {
 
+      (new ToolTip(
+            new \SPHERE\Common\Frontend\Text\Repository\Primary(new \SPHERE\Common\Frontend\Icon\Repository\Info())
+            , htmlspecialchars('<div style="width: 200px !important;">'
+                .'Wenn dieses Symbol <b>( ! )</b> angezeigt wird, ist zu der Person ist keine Mailadresse hinterlegt'
+                .'</div>')
+        ))->enableHtml();
+
         switch ($tblRole->getName()) {
-            case 'Auswertung: Allgemein': return new ToolTip(new Info(), 'Auswertungen (Standard, Individual), Check-Listen, Adresslisten für Serienbriefe');
-            case 'Auswertung: Flexible Auswertung': return new ToolTip(new Info(), 'Flexible Auswertung (Auswertungen selbst zusammenstellen)');
-            case 'Auswertung: Kamenz-Statistik': return new ToolTip(new Info(), 'Auswertungen für die Kamenz-Statistik (verfügbar für Schulträger, die die anteilige Kostenübernahme für diese Auswertung über die Schulstiftung explizit zugesagt haben)');
-            case 'Bildung: Fehlzeiten (Verwaltung)': return new ToolTip(new Info(), 'Fehlzeitenverwaltung Kalenderansicht mit direkter Suche über alle Schüler');
-            case 'Bildung: Klassenbuch (Lehrer mit Lehrauftrag)': return new ToolTip(new Info(), 'Digitales Klassenbuch für Lehrer mit Lehrauftrag und Klassenlehrer');
-            case 'Bildung: Klassenbuch (Alle Klassenbücher)': return new ToolTip(new Info(), 'Digitales Klassenbuch aller Klassen');
-            case 'Bildung: Klassenbuch (Integrationsbeauftragte)': return new ToolTip(new Info(), 'Digitales Klassenbuch und Integration aller Klassen');
-            case 'Bildung: Klassenbuch (Schulleitung)': return new ToolTip(new Info(), 'Digitales Klassenbuch, Integration und inkl. Verwaltung und Auswertung von Belehrungen aller Klassen');
-            case 'Bildung: Notenbuch (Integrationsbeauftragte)': return new ToolTip(new Info(), 'Notenbuch aller Schüler');
-            case 'Bildung: pädagogisches Tagebuch (Klassenlehrer)': return new ToolTip(new Info(), 'pädagogisches Tagebuch (Klassenlehrer mit eigener Klasse)');
-            case 'Bildung: pädagogisches Tagebuch (Schulleitung)': return new ToolTip(new Info(), 'pädagogisches Tagebuch (alle Klassen)');
-            case 'Bildung: Unterrichtsverwaltung': return new ToolTip(new Info(), 'Fächer-, Schuljahr- und Klassenverwaltung, Sortierung aller Klassen');
-            case 'Schüler und Eltern Zugang': return new ToolTip(new Info(), 'Zensurenübersicht, Online Krankmeldung und Online Kontakten Änderungswünsche für Eltern/Schüler (wird bei Generierung der Schüler/Eltern - Zugänge automatisch gesetzt), auch notwendig für Mitarbeiter, welche gleichzeitig Eltern sind');
-            case 'Bildung: Zensurenvergabe (Lehrer)': return new ToolTip(new Info(), 'Notenvergabe, Notenbuch für Lehrer mit Lehrauftrag, Notenbuch, Schülerübersicht, Einsicht Notenaufträge für Klassenlehrer (eigene Klasse)');
-            case 'Bildung: Zensurenvergabe (Schulleitung)': return new ToolTip(new Info(), 'Notenvergabe, Notenbuch in allen Klassen, Festlegung und Einsicht Notenaufträge (Stichtags- und Kopfnoten');
-            case 'Bildung: Zensurenverwaltung': return new ToolTip(new Info(), 'Festlegung von Zensuren-Typen, Berechnungsvorschriften, Bewertungssystemen, Mindestnotenanzahl');
-            case 'Bildung: Zeugnis (Drucken - Klassenlehrer)': return new ToolTip(new Info(), 'Drucken der Zeugnisse für Klassenlehrer (automatische Eingrenzung auf die jeweilige Klasse)');
-            case 'Bildung: Zeugnis (Drucken)': return new ToolTip(new Info(), 'Drucken der Zeugnisse');
-            case 'Bildung: Zeugnis (Einstellungen)': return new ToolTip(new Info(), 'Einstellungen Zeugnisvorlagen (Fächer und deren Reihenfolge auf den Zeugnis');
-            case 'Bildung: Zeugnis (Freigabe)': return new ToolTip(new Info(), 'Freitgabe der Zeugnisse für den Druck');
-            case 'Bildung: Zeugnis (Generierung)': return new ToolTip(new Info(), 'Generierung eines Zeugnisauftrages (Zeugnisdatum und -vorlage, Stichtags- und Kopfnotenauftrag, Name Schulleiter/in');
-            case 'Bildung: Zeugnis (Vorbereitung - Abgangszeugnisse)': return new ToolTip(new Info(), 'Zeugnisvorbereitung der Abgangszeugnisse für Oberschule und Gymnasium (SEKI)');
-            case 'Bildung: Zeugnis (Vorbereitung - Abschlusszeugnisse)': return new ToolTip(new Info(), 'Zeugnisvorbereitung der Abschlusszeugnisse (Prüfungsnoten, Vorjahresnoten, etc.)');
-            case 'Bildung: Zeugnis (Vorbereitung - Klassenlehrer)': return new ToolTip(new Info(), 'Zeugnisvorbereitung (Festlegung Kopfnoten, Hinterlegung sonstiger Informationen wie Bemerkung, Fehlzeiten etc.)');
-            case 'Datentransfer: Import und Export': return new ToolTip(new Info(), 'Import der Lehraufträge aus externer Stundenplansoftware');
-            case 'Dokumente': return new ToolTip(new Info(), 'Dokumentendruck Standard (Schulbescheinigung, Schülerkartei) und Individual');
-            case 'Einstellungen: Administrator': return new ToolTip(new Info(), 'Verwaltung von Benutzerkonten, Mandanteinstellungen, Eigenes Passwort ändern');
-            case 'Einstellungen: Benutzer': return new ToolTip(new Info(), 'Benutzereinestellungen (Aussehen der Programmoberfläche, Eigenes Passwort änden, Hilfe und Support)');
-            case 'Einstellungen: Benutzer (Schüler/Eltern) - nicht sichtbar': return new ToolTip(new Info(), 'Benutzereinestellungen (Aussehen der Programmoberfläche, Eigenes Passwort änden, wird bei Generierung der Schüler/Eltern - Zugänge automatisch gesetzt)');
-            case 'Einstellungen: Verwaltung Schüler und Eltern Zugang': return new ToolTip(new Info(), 'Erstellung der Benutzerkontos für Eltern / Schüler inkl. Passwortrücksetzung');
-            case 'Fakturierung': return new ToolTip(new Info(), 'Fakturierungsmodul (z.B. Verwaltung von Schulgeld');
-            case 'Feedback & Support': return new ToolTip(new Info(), 'Supportformular Ticketsystem');
-            case 'Stammdaten: Institutionenverwaltung (Lesen + Schreiben)': return new ToolTip(new Info(), 'Verwaltung von Institutionen (Schulen, Kitas, etc.)');
-            case 'Stammdaten: Institutionenverwaltung (Lesen)': return new ToolTip(new Info(), 'ReadOnly von Institutionen (Schulen, Kitas etc.)');
-            case 'Stammdaten: Personenverwaltung (Lesen + Schreiben)': return new ToolTip(new Info(), 'Verwaltung von Personen (Schüler, Sorgeberechtigte Interessenten, Lehrer, etc.');
-            case 'Stammdaten: Personenverwaltung (Lesen)': return new ToolTip(new Info(), 'ReadOnly von Personen (Schüler, Sorgeberechtigte, Interessenten, Lehrer, etc.');
+            case 'Auswertung: Allgemein': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Auswertungen (Standard, Individual), Check-Listen, Adresslisten für Serienbriefe'.'</div>')))->enableHtml();
+            case 'Auswertung: Flexible Auswertung': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Flexible Auswertung (Auswertungen selbst zusammenstellen)'.'</div>')))->enableHtml();
+            case 'Auswertung: Kamenz-Statistik': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Auswertungen für die Kamenz-Statistik (verfügbar für Schulträger, die die anteilige Kostenübernahme für diese Auswertung über die Schulstiftung explizit zugesagt haben)'.'</div>')))->enableHtml();
+            case 'Bildung: Fehlzeiten (Verwaltung)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Fehlzeitenverwaltung Kalenderansicht mit direkter Suche über alle Schüler'.'</div>')))->enableHtml();
+            case 'Bildung: Klassenbuch (Lehrer mit Lehrauftrag)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Digitales Klassenbuch für Lehrer mit Lehrauftrag und Klassenlehrer'.'</div>')))->enableHtml();
+            case 'Bildung: Klassenbuch (Alle Klassenbücher)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 220px !important;">'.'Digitales Klassenbuch aller Klassen'.'</div>')))->enableHtml();
+            case 'Bildung: Klassenbuch (Integrationsbeauftragte)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Digitales Klassenbuch und Integration aller Klassen'.'</div>')))->enableHtml();
+            case 'Bildung: Klassenbuch (Schulleitung)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Digitales Klassenbuch, Integration und inkl. Verwaltung und Auswertung von Belehrungen aller Klassen'.'</div>')))->enableHtml();
+            case 'Bildung: Notenbuch (Integrationsbeauftragte)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 150px !important;">'.'Notenbuch aller Schüler'.'</div>')))->enableHtml();
+            case 'Bildung: pädagogisches Tagebuch (Klassenlehrer)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'pädagogisches Tagebuch (Klassenlehrer mit eigener Klasse)'.'</div>')))->enableHtml();
+            case 'Bildung: pädagogisches Tagebuch (Schulleitung)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 250px !important;">'.'pädagogisches Tagebuch (alle Klassen)'.'</div>')))->enableHtml();
+            case 'Bildung: Unterrichtsverwaltung': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Fächer-, Schuljahr- und Klassenverwaltung, Sortierung aller Klassen'.'</div>')))->enableHtml();
+            case 'Schüler und Eltern Zugang': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Zensurenübersicht, Online Krankmeldung und Online Kontakten Änderungswünsche für Eltern/Schüler (wird bei Generierung der Schüler/Eltern - Zugänge automatisch gesetzt), auch notwendig für Mitarbeiter, welche gleichzeitig Eltern sind'.'</div>')))->enableHtml();
+            case 'Bildung: Zensurenvergabe (Lehrer)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Notenvergabe, Notenbuch für Lehrer mit Lehrauftrag, Notenbuch, Schülerübersicht, Einsicht Notenaufträge für Klassenlehrer (eigene Klasse)'.'</div>')))->enableHtml();
+            case 'Bildung: Zensurenvergabe (Schulleitung)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Notenvergabe, Notenbuch in allen Klassen, Festlegung und Einsicht Notenaufträge (Stichtags- und Kopfnoten'.'</div>')))->enableHtml();
+            case 'Bildung: Zensurenverwaltung': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Festlegung von Zensuren-Typen, Berechnungsvorschriften, Bewertungssystemen, Mindestnotenanzahl'.'</div>')))->enableHtml();
+            case 'Bildung: Zeugnis (Drucken - Klassenlehrer)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Drucken der Zeugnisse für Klassenlehrer (automatische Eingrenzung auf die jeweilige Klasse)'.'</div>')))->enableHtml();
+            case 'Bildung: Zeugnis (Drucken)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 150px !important;">'.'Drucken der Zeugnisse'.'</div>')))->enableHtml();
+            case 'Bildung: Zeugnis (Einstellungen)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Einstellungen Zeugnisvorlagen (Fächer und deren Reihenfolge auf den Zeugnis'.'</div>')))->enableHtml();
+            case 'Bildung: Zeugnis (Freigabe)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 225px !important;">'.'Freitgabe der Zeugnisse für den Druck'.'</div>')))->enableHtml();
+            case 'Bildung: Zeugnis (Generierung)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Generierung eines Zeugnisauftrages (Zeugnisdatum und -vorlage, Stichtags- und Kopfnotenauftrag, Name Schulleiter/in'.'</div>')))->enableHtml();
+            case 'Bildung: Zeugnis (Vorbereitung - Abgangszeugnisse)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Zeugnisvorbereitung der Abgangszeugnisse für Oberschule und Gymnasium (SEKI)'.'</div>')))->enableHtml();
+            case 'Bildung: Zeugnis (Vorbereitung - Abschlusszeugnisse)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Zeugnisvorbereitung der Abschlusszeugnisse (Prüfungsnoten, Vorjahresnoten, etc.)'.'</div>')))->enableHtml();
+            case 'Bildung: Zeugnis (Vorbereitung - Klassenlehrer)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Zeugnisvorbereitung (Festlegung Kopfnoten, Hinterlegung sonstiger Informationen wie Bemerkung, Fehlzeiten etc.)'.'</div>')))->enableHtml();
+            case 'Datentransfer: Import und Export': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Import der Lehraufträge aus externer Stundenplansoftware'.'</div>')))->enableHtml();
+            case 'Dokumente': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Dokumentendruck Standard (Schulbescheinigung, Schülerkartei) und Individual'.'</div>')))->enableHtml();
+            case 'Einstellungen: Administrator': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Verwaltung von Benutzerkonten, Mandanteinstellungen, Eigenes Passwort ändern'.'</div>')))->enableHtml();
+            case 'Einstellungen: Benutzer': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Benutzereinestellungen (Aussehen der Programmoberfläche, Eigenes Passwort änden, Hilfe und Support)'.'</div>')))->enableHtml();
+            case 'Einstellungen: Benutzer (Schüler/Eltern) - nicht sichtbar': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Benutzereinestellungen (Aussehen der Programmoberfläche, Eigenes Passwort änden, wird bei Generierung der Schüler/Eltern - Zugänge automatisch gesetzt)'.'</div>')))->enableHtml();
+            case 'Einstellungen: Verwaltung Schüler und Eltern Zugang': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Erstellung der Benutzerkontos für Eltern / Schüler inkl. Passwortrücksetzung'.'</div>')))->enableHtml();
+            case 'Fakturierung': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Fakturierungsmodul (z.B. Verwaltung von Schulgeld'.'</div>')))->enableHtml();
+            case 'Feedback & Support': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 200px !important;">'.'Supportformular Ticketsystem'.'</div>')))->enableHtml();
+            case 'Stammdaten: Institutionenverwaltung (Lesen + Schreiben)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Verwaltung von Institutionen (Schulen, Kitas, etc.)'.'</div>')))->enableHtml();
+            case 'Stammdaten: Institutionenverwaltung (Lesen)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'ReadOnly von Institutionen (Schulen, Kitas etc.)'.'</div>')))->enableHtml();
+            case 'Stammdaten: Personenverwaltung (Lesen + Schreiben)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'Verwaltung von Personen (Schüler, Sorgeberechtigte Interessenten, Lehrer, etc.'.'</div>')))->enableHtml();
+            case 'Stammdaten: Personenverwaltung (Lesen)': return (new ToolTip(new Info(), htmlspecialchars('<div style="width: 300px !important;">'.'ReadOnly von Personen (Schüler, Sorgeberechtigte, Interessenten, Lehrer, etc.'.'</div>')))->enableHtml();
         }
         return '';
 
